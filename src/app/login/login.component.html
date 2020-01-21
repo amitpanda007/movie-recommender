@@ -1,0 +1,13 @@
+<form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)" autocomplete="off">
+  <div class="form-group">
+    <label for="userName">User Name</label>
+    <input (ngModel)="userName" name="userName" type="text" placeholder="username">
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input (ngModel)="password" name="password" type="password" placeholder="password">
+  </div>
+
+  <button type="submit">Login</button>
+  <button type="button">Cancel</button>
+</form>
