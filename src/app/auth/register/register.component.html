@@ -1,7 +1,11 @@
 <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
   <div class="form-group">
-    <label for="fullName">Full Name</label>
-    <input formControlName="fullName" name="fullName" type="text" placeholder="full name">
+    <label for="firstName">First Name</label>
+    <input formControlName="firstName" name="firstName" type="text" placeholder="first name">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input formControlName="lastName" name="lastName" type="text" placeholder="last name">
   </div>
   <div class="form-group">
     <label for="userName">User Name</label>
