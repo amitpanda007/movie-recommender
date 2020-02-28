@@ -7,7 +7,7 @@ import { SuccessSnackbar, ErrorSnackbar } from '../common/snackbar.component';
 @Injectable()
 export class AuthService{
 
-  BASE_URL = "http://localhost:5000";
+  BASE_URL = "http://localhost:5000/api/v1/";
   TOKEN_KEY = "token";
   FULLNAME_KEY = "fullname"
 
@@ -30,7 +30,7 @@ export class AuthService{
 
   register(user) {
     delete user.confirmPassword;
-    this.http.post(this.BASE_URL + "/register", user).subscribe((data:any) => {
+    this.http.post(this.BASE_URL + "auth/register", user).subscribe((data:any) => {
       console.log(data);
       if (data.message) {
         this._snackBar.openFromComponent(SuccessSnackbar, {
@@ -50,11 +50,11 @@ export class AuthService{
   }
 
   login(user) {
-    this.http.post(this.BASE_URL + "/login", user).subscribe((data:any) => {
+    this.http.post(this.BASE_URL + "auth/login", user).subscribe((data:any) => {
       if(!data.access_token)
         return;
       localStorage.setItem(this.TOKEN_KEY, data.access_token);
-      localStorage.setItem(this.FULLNAME_KEY, data.full_name);
+      localStorage.setItem(this.FULLNAME_KEY, data.fullName);
       this.router.navigate(['/']);
       this._snackBar.openFromComponent(SuccessSnackbar, {
         data: data.message,
