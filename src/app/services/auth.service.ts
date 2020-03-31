@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessSnackbar, ErrorSnackbar } from '../common/snackbar.component';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService{
 
-  BASE_URL = "http://localhost:5000/api/v1/";
+  BASE_URL = environment.apiUrl;
   TOKEN_KEY = "token";
   FULLNAME_KEY = "fullname"
 
