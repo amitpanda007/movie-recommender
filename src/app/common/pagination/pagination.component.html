@@ -1,0 +1,5 @@
+<div class="pagination">
+    <a aria-lable="Previous" (click)="paginate($event)" id="-1">&laquo;</a>
+    <a class="pages" *ngFor="let page of totalItems" (click)="paginate($event)" id="{{page + 1}}">{{page + 1}}</a>
+    <a aria-lable="Next" (click)="paginate($event)" id="+1">&raquo;</a>
+</div>

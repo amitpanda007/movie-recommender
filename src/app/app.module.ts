@@ -15,7 +15,8 @@ import { NavComponent } from './nav/nav.component';
 import { SuccessSnackbar, ErrorSnackbar } from './common/snackbar.component';
 import { FilterMoviesComponent } from './movies/movies.filter.component';
 import { SharedModule } from './shared/shared.module';
-import { MoviesPaginationComponent } from './movies/movies.pagination.component';
+import { PaginationComponent } from './common/pagination/pagination.component';
+import { MovieService } from './services/movie.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { MoviesPaginationComponent } from './movies/movies.pagination.component'
     SuccessSnackbar,
     ErrorSnackbar,
     FilterMoviesComponent,
-    MoviesPaginationComponent
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +41,7 @@ import { MoviesPaginationComponent } from './movies/movies.pagination.component'
     SharedModule
   ],
   entryComponents: [SuccessSnackbar, ErrorSnackbar],
-  providers: [AuthService, HttpClient],
+  providers: [AuthService, MovieService, HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

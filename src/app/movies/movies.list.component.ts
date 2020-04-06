@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import * as data from '../dummy_data/movies_list.json';
-import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { MovieService } from '../services/movie.service';
+import { IMovies } from '../shared/interface';
 
 @Component({
   selector: 'movies-list',
@@ -11,21 +10,25 @@ import { Observable } from 'rxjs';
 })
 export class MoviesListComponent  implements OnInit {
   //moviesList: any = (data as any).default;
-  moviesList: any[];
+  moviesList: Array<IMovies>;
+  moviesCount: any;
   filteredMoviesList: any[];
+  showPerPage: number;
 
-  constructor(private http: HttpClient) {
+  constructor(private movieService: MovieService) {
   }
 
   ngOnInit(): void {
-    this.getAllMovies().subscribe((data: any) => {
+    this.showPerPage = 20;
+    this.movieService.getMovies(0, this.showPerPage).subscribe((data: any) => {
       console.log(data);
       this.moviesList =  this.filteredMoviesList = data;
     });
-  }
 
-  getAllMovies() {
-    return this.http.get(environment.apiUrl + "movies/all");
+    this.movieService.getMoviesCount().subscribe((data: any) => {
+      console.log(data);
+      this.moviesCount = data.totalMovies;
+    });
   }
 
   filter(data: string) {
@@ -36,7 +39,15 @@ export class MoviesListComponent  implements OnInit {
     }else {
       this.filteredMoviesList = this.moviesList;
     }
-
   }
 
+  changePage(data: number) {
+    console.log(data);
+    let start = (data - 1) * this.showPerPage + 1;
+    let end = data * this.showPerPage;
+    this.movieService.getMovies(start, end).subscribe((data: any) => {
+      console.log(data);
+      this.moviesList =  this.filteredMoviesList = data;
+    });
+  }
 }

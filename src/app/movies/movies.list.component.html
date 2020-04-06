@@ -5,4 +5,4 @@
     <span>{{movie.movieName | capitalize}}</span>
   </a>
 </div>
-<movie-pagination></movie-pagination>
+<pagination [totalData]="moviesCount" [itemsPerPage]="showPerPage" (pageChange)="changePage($event)"></pagination>
