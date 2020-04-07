@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { CacheService } from './cache.service';
 
 
 @Injectable()
 export class MovieService{
 
-  cache: any = {}
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cacheService: CacheService) {}
 
   getMovies(from: number, to: number) {
     const MOVIES_URL = environment.apiUrl + `movies/all?from=${from}&to=${to}`;
@@ -21,18 +20,17 @@ export class MovieService{
     return this.http.get(MOVIES_COUNT_URL);
   }
 
-  getMoviesWithCache(from: number, to: number): Observable<any> {
+  public getMoviesWithCache(from: number, to: number): Observable<any> {
     const MOVIES_URL = environment.apiUrl + `movies/all?from=${from}&to=${to}`;
-    if (this.cache[MOVIES_URL]) {
-      console.log('Returning cached value!')
-      return of(this.cache[MOVIES_URL])
+    const moviesFromCache = this.cacheService.getCache(MOVIES_URL);
+    if (moviesFromCache) {
+      console.log("Resurning data from cache");
+      return of(moviesFromCache);
     }
-    console.log('Do the request again')
-    this.http.get(MOVIES_URL).pipe(
-      tap(resolvedValue => {
-        console.log(resolvedValue);
-        this.cache[MOVIES_URL] = resolvedValue;
-      }));
-  }
 
+    console.log('Do the request again')
+    const response = this.http.get<any>(MOVIES_URL);
+    response.subscribe(movies => this.cacheService.setCache(MOVIES_URL, movies));
+    return response;
+  }
 }

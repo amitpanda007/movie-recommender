@@ -17,6 +17,7 @@ import { FilterMoviesComponent } from './movies/movies.filter.component';
 import { SharedModule } from './shared/shared.module';
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { MovieService } from './services/movie.service';
+import { CacheService } from './services/cache.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { MovieService } from './services/movie.service';
     SharedModule
   ],
   entryComponents: [SuccessSnackbar, ErrorSnackbar],
-  providers: [AuthService, MovieService, HttpClient],
+  providers: [AuthService, MovieService, CacheService, HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

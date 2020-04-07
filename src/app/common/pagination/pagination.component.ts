@@ -24,13 +24,13 @@ export class PaginationComponent implements OnInit,OnChanges{
     if(changes['totalData']) {
       if(changes['totalData'].currentValue) {
         this.totalItems = this.getPages(this.totalData);
+        this.lastPage = this.totalItems.length;
       }
     }
   }
 
   ngOnInit() {
     this.currentPage = 1;
-    this.lastPage = 2;
   }
 
   paginate(event: any) {
@@ -41,7 +41,7 @@ export class PaginationComponent implements OnInit,OnChanges{
       if(this.currentPage > 1) {
         this.currentPage -= 1;
         this.pageChange.emit(this.currentPage);
-        console.log("going to previous page "+ this.currentPage);
+        console.log("going to page "+ this.currentPage);
       }
       return;
     }
@@ -49,12 +49,12 @@ export class PaginationComponent implements OnInit,OnChanges{
       if(this.currentPage < this.lastPage) {
         this.currentPage += 1;
         this.pageChange.emit(this.currentPage);
-        console.log("going to next page " + this.currentPage);
+        console.log("going to page " + this.currentPage);
       }
       return;
     }
     console.log("going to page " + value);
-    this.currentPage = value;
+    this.currentPage = parseInt(value);
     this.pageChange.emit(this.currentPage);
   }
 

@@ -3,6 +3,9 @@ import * as data from '../dummy_data/movies_list.json';
 import { MovieService } from '../services/movie.service';
 import { IMovies } from '../shared/interface';
 
+const INITIAL_MOVIE_ID = 1
+const ITEMS_PER_PAGE = 20
+
 @Component({
   selector: 'movies-list',
   templateUrl: './movies.list.component.html',
@@ -19,11 +22,15 @@ export class MoviesListComponent  implements OnInit {
   }
 
   ngOnInit(): void {
-    this.showPerPage = 20;
-    this.movieService.getMovies(0, this.showPerPage).subscribe((data: any) => {
-      console.log(data);
+    this.showPerPage = ITEMS_PER_PAGE;
+    // this.movieService.getMovies(0, this.showPerPage).subscribe((data: any) => {
+    //   console.log(data);
+    //   this.moviesList =  this.filteredMoviesList = data;
+    // });
+
+    this.movieService.getMoviesWithCache(INITIAL_MOVIE_ID, this.showPerPage).subscribe((data: any) => {
       this.moviesList =  this.filteredMoviesList = data;
-    });
+    })
 
     this.movieService.getMoviesCount().subscribe((data: any) => {
       console.log(data);
@@ -42,12 +49,14 @@ export class MoviesListComponent  implements OnInit {
   }
 
   changePage(data: number) {
-    console.log(data);
     let start = (data - 1) * this.showPerPage + 1;
     let end = data * this.showPerPage;
-    this.movieService.getMovies(start, end).subscribe((data: any) => {
-      console.log(data);
+    // this.movieService.getMovies(start, end).subscribe((data: any) => {
+    //   console.log(data);
+    //   this.moviesList =  this.filteredMoviesList = data;
+    // });
+    this.movieService.getMoviesWithCache(start, end).subscribe((data: any) => {
       this.moviesList =  this.filteredMoviesList = data;
-    });
+    })
   }
 }
