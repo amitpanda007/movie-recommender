@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   moduleId: module.id,
@@ -9,6 +10,13 @@ import { AuthService } from '../services/auth.service';
 })
 export class NavComponent {
 
-  constructor(private auth: AuthService){}
+  constructor(private auth: AuthService, private router: Router){}
 
+  openLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  openRegister() {
+    this.router.navigate(['/register']);
+  }
 }

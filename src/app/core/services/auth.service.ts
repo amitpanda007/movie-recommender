@@ -2,29 +2,30 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SuccessSnackbar, ErrorSnackbar } from '../common/snackbar.component';
-import { environment } from '../../environments/environment';
+import { SuccessSnackbar, ErrorSnackbar } from '../../common/snackbar.component';
+import { environment } from '../../../environments/environment';
+import { LocalStorageService } from './local.storage.service';
 
 @Injectable()
 export class AuthService{
 
   BASE_URL = environment.apiUrl;
-  TOKEN_KEY = "token";
-  FULLNAME_KEY = "fullname"
+  TOKEN_KEY = "accessToken";
+  FULLNAME_KEY = "fullName"
 
-  constructor(private http: HttpClient, private router: Router, private _snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private router: Router, private _snackBar: MatSnackBar, private localStorageService: LocalStorageService) {}
 
   get isAuthenticated() {
-    return !!localStorage.getItem(this.TOKEN_KEY);
+    return !!this.localStorageService.get(this.TOKEN_KEY);
   }
 
   get name() {
-    return localStorage.getItem(this.FULLNAME_KEY);
+    return this.localStorageService.get(this.FULLNAME_KEY);
   }
 
   get tokenHeader() {
     const options = {
-      headers: new HttpHeaders().append("Authorization", "Bearer " + localStorage.getItem(this.TOKEN_KEY))
+      headers: new HttpHeaders().append("Authorization", "Bearer " + this.localStorageService.get(this.TOKEN_KEY))
     }
     return options;
   }
@@ -34,6 +35,7 @@ export class AuthService{
     this.http.post(this.BASE_URL + "auth/register", user).subscribe((data:any) => {
       console.log(data);
       if (data.message) {
+        this.router.navigate(['/login']);
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: data.message,
           duration: 2000
@@ -52,10 +54,11 @@ export class AuthService{
 
   login(user) {
     this.http.post(this.BASE_URL + "auth/login", user).subscribe((data:any) => {
-      if(!data.access_token)
+      if(!data.accessToken)
         return;
-      localStorage.setItem(this.TOKEN_KEY, data.access_token);
-      localStorage.setItem(this.FULLNAME_KEY, data.fullName);
+      this.localStorageService.set(this.TOKEN_KEY, data.accessToken);
+      this.localStorageService.set(this.FULLNAME_KEY, data.fullName);
+
       this.router.navigate(['/']);
       this._snackBar.openFromComponent(SuccessSnackbar, {
         data: data.message,
@@ -73,11 +76,13 @@ export class AuthService{
     });
   }
 
-  //TODO : Post logout to server api
+  //TODO: Post logout to server api
   logout() {
-    // this.http.post(this.BASE_URL + "/logout", this.TOKEN_KEY);
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.FULLNAME_KEY);
+    this.http.get(this.BASE_URL + "/logout");
+    this.localStorageService.remove(this.TOKEN_KEY);
+    this.localStorageService.remove(this.FULLNAME_KEY);
+    this.router.navigate(['/']);
+    window.location.reload();
   }
 
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import * as data from '../dummy_data/movies_list.json';
-import { MovieService } from '../services/movie.service';
-import { IMovies } from '../shared/interface';
+import { MovieService } from '../../core/services/movie.service';
+import { IMovies } from '../../shared/interface';
 
 const INITIAL_MOVIE_ID = 1
-const ITEMS_PER_PAGE = 20
+const ITEMS_PER_PAGE = 50
 
 @Component({
   selector: 'movies-list',

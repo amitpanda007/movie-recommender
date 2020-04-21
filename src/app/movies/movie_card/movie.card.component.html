@@ -1,0 +1,17 @@
+<mat-card class="example-card">
+  <mat-card-header class="card-header">
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <mat-card-title class="card-title" *ngIf="movieInfo">{{movieInfo?.movieName | default:'Movie Name'}}</mat-card-title>
+    <mat-card-subtitle><b>Genre:</b> {{movieInfo?.genre | default:'Genre'}}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image class="card-image" src="{{movieInfo?.coverImage | default:'https://via.placeholder.com/150'}}" alt="">
+  <mat-card-content>
+    <p>
+      {{(movieInfo?.storyLine?.length > 100) ? (movieInfo?.storyLine | slice:0:100) + '...' : movieInfo?.storyLine}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>RATE</button>
+  </mat-card-actions>
+</mat-card>

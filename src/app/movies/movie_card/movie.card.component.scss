@@ -1,0 +1,21 @@
+.example-card {
+  width: 200px;
+  margin: 10px;
+}
+
+.card-header {
+  min-height: 6em;
+}
+
+.card-title {
+  font-size: medium;
+}
+
+.card-image {
+  height: 60%;
+}
+
+.example-header-image {
+  background-image: url('https://via.placeholder.com/150');
+  background-size: cover;
+}

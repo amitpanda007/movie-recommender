@@ -1,48 +1,38 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule  } from "@angular/common/http"
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSnackBarModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MoviesListComponent } from './movies/movies.list.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { AuthService } from './services/auth.service';
-import { NavComponent } from './nav/nav.component';
-import { SuccessSnackbar, ErrorSnackbar } from './common/snackbar.component';
-import { FilterMoviesComponent } from './movies/movies.filter.component';
+import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { PaginationComponent } from './common/pagination/pagination.component';
-import { MovieService } from './services/movie.service';
-import { CacheService } from './services/cache.service';
+import { LoginModule } from './login/login.module';
+import { RegisterModule } from './register/register.module';
+
+import { AppComponent } from './app.component';
+import { SuccessSnackbar, ErrorSnackbar } from './common/snackbar.component';
+import { MoviesModule } from './movies/movies.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    MoviesListComponent,
-    LoginComponent,
-    RegisterComponent,
-    NavComponent,
     SuccessSnackbar,
-    ErrorSnackbar,
-    FilterMoviesComponent,
-    PaginationComponent
+    ErrorSnackbar
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatSnackBarModule,
-    SharedModule
+    AppRoutingModule,
+    LoginModule,
+    RegisterModule,
+    SharedModule,
+    CoreModule,
+    MoviesModule
   ],
   entryComponents: [SuccessSnackbar, ErrorSnackbar],
-  providers: [AuthService, MovieService, CacheService, HttpClient],
+  providers: [HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

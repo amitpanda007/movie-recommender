@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { CacheService } from './cache.service';
 
 
@@ -13,6 +13,11 @@ export class MovieService{
   getMovies(from: number, to: number) {
     const MOVIES_URL = environment.apiUrl + `movies/all?from=${from}&to=${to}`;
     return this.http.get(MOVIES_URL);
+  }
+
+  getMovieWithId(movieId: number) {
+    const MOVIE_URL = environment.apiUrl + `movie/${movieId}`;
+    return this.http.get(MOVIE_URL);
   }
 
   getMoviesCount() {
@@ -33,4 +38,10 @@ export class MovieService{
     response.subscribe(movies => this.cacheService.setCache(MOVIES_URL, movies));
     return response;
   }
+
+  getAllGenres() {
+    const MOVIE_GENRE_URL = environment.apiUrl + 'movies/genres';
+    return this.http.get(MOVIE_GENRE_URL);
+  }
+
 }

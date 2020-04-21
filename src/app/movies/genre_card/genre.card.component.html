@@ -1,0 +1,9 @@
+<mat-card class="example-card" (click)="selectGenre($event, genre)">
+  <mat-card-header class="card-header">
+    <mat-card-title class="card-title" *ngIf="genre">{{genre | default:'Genre Name'}}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image class="card-image" src="{{'' | default:'https://via.placeholder.com/150'}}" alt="">
+  <!-- <mat-card-actions>
+    <button mat-button>LIKE</button>
+  </mat-card-actions> -->
+</mat-card>
