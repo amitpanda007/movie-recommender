@@ -3,8 +3,7 @@ import { MovieService } from '../../core/services/movie.service';
 import { IMovies } from '../../shared/interface';
 
 const INITIAL_MOVIE_ID = 1
-const ITEMS_PER_PAGE = 50
-
+const ITEMS_PER_PAGE = 25
 @Component({
   selector: 'movies-list',
   templateUrl: './movies.list.component.html',
@@ -47,13 +46,10 @@ export class MoviesListComponent  implements OnInit {
     }
   }
 
-  changePage(data: number) {
-    let start = (data - 1) * this.showPerPage + 1;
-    let end = data * this.showPerPage;
-    // this.movieService.getMovies(start, end).subscribe((data: any) => {
-    //   console.log(data);
-    //   this.moviesList =  this.filteredMoviesList = data;
-    // });
+  changePage(pageEvent: any) {
+    console.log(pageEvent);
+    let start = pageEvent.pageIndex * pageEvent.pageSize + 1;
+    let end = (pageEvent.pageIndex + 1) * pageEvent.pageSize;
     this.movieService.getMoviesWithCache(start, end).subscribe((data: any) => {
       this.moviesList =  this.filteredMoviesList = data;
     })

@@ -14,10 +14,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./movies.recommend.component.scss']
 })
 export class MoviesRecommendComponent implements OnInit{
+  authenticated: boolean;
   private recommendList: any;
   private loadingComplete: boolean = false;
   private userRecommendationReady: boolean = false;
   private initialSetupReady: boolean = false;
+  private hideRecommendGenres: boolean = false;
   private recommendGenres: any;
   private genresSelected: Array<string> = [];
 
@@ -25,11 +27,16 @@ export class MoviesRecommendComponent implements OnInit{
               private auth: AuthService, private userService: UserService, private dislog: MatDialog, private router: Router) {}
 
   ngOnInit(): void {
+    this.auth.subscribe(
+      (authenticated) => {
+        this.authenticated = authenticated;
+      });
 
-    if (!this.auth.isAuthenticated) {
-      this.movieRecommendService.getDefaultRecommend().subscribe(_recommend => {
+    console.log(this.authenticated);
+    if (!this.authenticated) {
+      this.movieRecommendService.getDefaultRecommend().subscribe((_response : any) => {
         this.loadingComplete = true;
-        this.recommendList = _recommend;
+        this.recommendList = _response.recommend;
       },error => {
         this.loadingComplete = true;
         this._snackBar.openFromComponent(ErrorSnackbar, {
@@ -39,11 +46,14 @@ export class MoviesRecommendComponent implements OnInit{
       });
     }
 
-    if (this.auth.isAuthenticated) {
+    if (this.authenticated) {
+      console.log("Registered User found.");
       this.userService.getUserInfo().subscribe((_userInfo: any) => {
         // User has not completed Initial setup & not selected any genre.
         this.initialSetupReady = _userInfo.initialSetupDone;
         if(!_userInfo.initialSetupDone) {
+          console.log("Needs initialize setup.");
+          console.log(this.recommendGenres);
           this.movieService.getAllGenres().subscribe((_genres: any) => {
             this.loadingComplete = true;
             this.dislog.open(InitialGenreSelectionDialogComponent, {
@@ -51,15 +61,26 @@ export class MoviesRecommendComponent implements OnInit{
               disableClose: true
             });
             this.recommendGenres = _genres.genres;
+            this.hideRecommendGenres = true;
           });
         }else {
+          console.log("Retriving Recommendation for Registered User.");
           //TODO: Get Recommendation for Logged in user who has done initial genre selection
-          this.movieRecommendService.getDefaultRecommend().subscribe(_recommend => {
+          this.movieRecommendService.getMovieRecommend().subscribe((_response : any) => {
             this.loadingComplete = true;
-            this.userRecommendationReady = true;
-
-            this.recommendList = _recommend;
+            if(_response.message) {
+              this._snackBar.openFromComponent(SuccessSnackbar, {
+                data: _response.message,
+                duration: 2000
+              });
+            }
+            if(_response.recommend) {
+              this.userRecommendationReady = true;
+              this.recommendList = _response.recommend;
+            }
           },error => {
+            console.log(error);
+            console.log("Some Error Happened");
             this.loadingComplete = true;
             this._snackBar.openFromComponent(ErrorSnackbar, {
               data: error.message,
@@ -69,9 +90,10 @@ export class MoviesRecommendComponent implements OnInit{
           // this.userRecommendationReady = true;
         }
       },error => {
+        console.log("Some Error Happened");
         this.loadingComplete = true;
         this._snackBar.openFromComponent(ErrorSnackbar, {
-          data: error.message,
+          data: error,
           duration: 2000
         });
       });

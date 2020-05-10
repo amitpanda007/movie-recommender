@@ -1,18 +1,18 @@
 <!-- <div *ngIf="!loadingComplete" class="loading">Loading...</div> -->
 <mat-spinner *ngIf="!loadingComplete" class="loading"></mat-spinner>
 
-<mat-toolbar *ngIf="!auth.isAuthenticated">
+<mat-toolbar *ngIf="!authenticated">
   <span class="notification">Find some Movies to watch. Log in to get better Recommendation.</span>
 </mat-toolbar>
-<mat-toolbar *ngIf="auth.isAuthenticated && initialSetupReady && !userRecommendationReady">
+<mat-toolbar *ngIf="authenticated && initialSetupReady && !userRecommendationReady">
   <span class="notification">We are preparing your Recommendation based on your preference. Once available we will update you.</span>
-  <mat-spinner class="loading"></mat-spinner>
+  <mat-spinner *ngIf="!loadingComplete" class="loading"></mat-spinner>
 </mat-toolbar>
 
-<div class="genreContainer" *ngIf="recommendGenres">
+<div class="genreContainer" *ngIf="hideRecommendGenres">
   <genre-card *ngFor="let genre of recommendGenres" [genre]="genre" (genreSelected)="userSelectedGenre($event)"></genre-card>
 </div>
-<div class="container">
+<div class="container" *ngIf="recommendList">
   <movie-card *ngFor="let movie of recommendList" [movieId]="movie.movieId" disabled></movie-card>
 </div>
 <button *ngIf="genresSelected.length > 0 && !initialSetupReady" mat-flat-button color="primary" [disabled]="genresSelected.length < 5"

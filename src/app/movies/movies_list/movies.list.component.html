@@ -1,8 +1,16 @@
 <filter-movies (changed)="filter($event)"></filter-movies>
+
+<!--
 <div class="card-container">
   <a class="card" *ngFor="let movie of filteredMoviesList" target="_blank" rel="noopener" href="{{movie.imdbUrl}}">
     <img src="{{movie.imageUrl}}">
     <span>{{movie.movieName | capitalize}}</span>
   </a>
 </div>
+-->
+
+<div class="container" *ngIf="filteredMoviesList">
+  <movie-card *ngFor="let movie of filteredMoviesList" [movieId]="movie.movieId" disabled></movie-card>
+</div>
+
 <pagination [totalData]="moviesCount" [itemsPerPage]="showPerPage" (pageChange)="changePage($event)"></pagination>

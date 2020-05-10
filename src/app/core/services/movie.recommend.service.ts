@@ -12,13 +12,13 @@ export class MovieRecommendService{
   constructor(private http: HttpClient, private cacheService: CacheService, private auth: AuthService) {}
 
   getDefaultRecommend() {
-    const DEFAULT_RECOMMEND_URL = environment.apiUrl + 'recommend/default';
+    const DEFAULT_RECOMMEND_URL = environment.apiUrl + 'recommend/anonymous';
     return this.http.get(DEFAULT_RECOMMEND_URL);
   }
 
   getMovieRecommend() {
     const DEFAULT_RECOMMEND_URL = environment.apiUrl + 'recommend/movies';
-    return this.http.get(DEFAULT_RECOMMEND_URL);
+    return this.http.get(DEFAULT_RECOMMEND_URL, this.auth.tokenHeader);
   }
 
 }

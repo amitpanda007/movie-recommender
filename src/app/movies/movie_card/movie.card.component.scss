@@ -1,5 +1,23 @@
+.mat-card {
+  padding: 0px;
+}
+
+.mat-card-image {
+  width: calc(100%);
+  margin: 0 0;
+}
+
+.mat-card-actions {
+  margin: 5px 5px;
+  min-height: 32px;
+}
+
+.mat-card>.mat-card-actions:last-child {
+  margin-bottom: 0px;
+}
+
 .example-card {
-  width: 200px;
+  width: 210px;
   margin: 10px;
 }
 
@@ -11,11 +29,73 @@
   font-size: medium;
 }
 
+.card-title>a {
+  color: black;
+}
+
 .card-image {
-  height: 60%;
+  height: 280px;
 }
 
 .example-header-image {
   background-image: url('https://via.placeholder.com/150');
   background-size: cover;
+}
+
+.card-action {
+  display: flex;
+}
+
+.movie-rating {
+  margin-left: .2em;
+}
+
+.toggle-rating {
+  height: 32px;
+}
+
+mat-card-subtitle {
+  color: gray;
+  font-size: small;
+}
+
+mat-card-subtitle > span {
+  color: pink;
+  font-size: medium;
+  font-weight: 400;
+}
+
+.rating-star {
+  display: inline-flex;
+  align-items: baseline;
+  color: #f5c518;
+  color: rgb(245,197,24);
+}
+
+.rating-star svg {
+  height: 12px;
+  width: 12px;
+}
+
+.ipc-rating-star .icon {
+  height: 0.8em;
+  width: 0.8em;
+  margin-right: 0.15em;
+}
+
+.icon {
+  vertical-align: middle;
+}
+
+.rating-value {
+  padding-left: 5px;
+  color: black;
+}
+
+
+.overall-rating-value {
+  font-size: small;
+  padding-left: 5px;
+  color: black;
+  font-weight: 400;
 }

@@ -7,6 +7,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class GenreCardComponent  implements OnInit {
 
+  private defaultImage = '../../../../../assets/image/placeholder-image.png';
+
   @Input() genre : string;
   @Output() genreSelected: EventEmitter<number> = new EventEmitter<number>();
 
