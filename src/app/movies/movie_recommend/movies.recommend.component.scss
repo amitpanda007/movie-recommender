@@ -8,7 +8,7 @@
 
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 60%;
     margin-top: -100px;
     margin-left: -200px;
 
@@ -31,4 +31,42 @@
   position: fixed;
   bottom: 2%;
   right: 2%;
+}
+
+.movie-rec {
+  background-color: #E8F5E9;
+}
+
+.genre-rec {
+  background-color: #F9FBE7;
+}
+
+.rating-rec {
+  background-color: #F3E5F5;
+}
+
+.rec-title {
+  align-items: center;
+  display: inline;
+  font-size: larger;
+  font-weight: 800;
+}
+
+.center {
+  text-align: center;
+  margin: 2em;
+}
+
+.search-rec {
+  position: absolute;
+  background-color: whitesmoke;
+  z-index: 4;
+  width: 90%;
+  border-radius: 6px;
+  margin: 2px 0 0 12px;
+}
+
+.search-rec ul li{
+  list-style-type: none;
+  padding: 5px;
 }

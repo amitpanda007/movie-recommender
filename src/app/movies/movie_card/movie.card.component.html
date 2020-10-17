@@ -27,7 +27,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-card-actions *ngIf="authenticated && !alreadyrated" class="card-action">
+  <mat-card-actions *ngIf="authenticated && !alreadyRated" class="card-action">
     <!-- <button mat-button (click)="rateMovie()">RATE</button> -->
     <mat-slide-toggle (click)="rateMovie()"
           class="toggle-rating"
@@ -39,7 +39,7 @@
     <rating *ngIf="showStartsToRate" (userRating)="updateMovieRating($event)" class="movie-rating"></rating>
   </mat-card-actions>
 
-  <mat-card-actions *ngIf="alreadyrated" class="card-action">
+  <mat-card-actions *ngIf="alreadyRated" class="card-action">
     <span>You Rated :&nbsp;</span>
     <span class="rating-star">
       <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="currentColor" role="presentation">
@@ -49,6 +49,12 @@
       </svg>
       <span class="rating-value">{{userMovierating}}</span>
     </span>
+  </mat-card-actions>
+
+  <mat-card-actions class="card-action card-action-icon">
+    <a (click)="navigateToRecommed(movieInfo?.movieName)">
+      <img class="rec-icon" src="{{recommendImage}}" alt="">
+    </a>
   </mat-card-actions>
 
 </mat-card>

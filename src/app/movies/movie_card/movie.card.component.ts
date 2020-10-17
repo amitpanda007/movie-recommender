@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MovieService } from '../../core/services/movie.service';
 import { IMovies } from '../../shared/interface';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { Router } from '@angular/router';
 
 class RatingInfo {
   movieTitle: string;
@@ -18,15 +19,16 @@ class RatingInfo {
 export class MovieCardComponent  implements OnInit {
   authenticated: boolean;
   private defaultImage = '../../../../../assets/image/placeholder-image.png';
+  private recommendImage = '../../../../../assets/image/icons/recommend.svg';
 
   @Input() movieId : number;
   private movieInfo: any;
   private showStoryLine: boolean = false;
   private showStartsToRate: boolean = false;
-  private alreadyrated: boolean = false;
+  private alreadyRated: boolean = false;
   private userMovierating: number;
 
-  constructor(private movieService: MovieService, private auth: AuthService) {
+  constructor(private movieService: MovieService, private auth: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -48,7 +50,7 @@ export class MovieCardComponent  implements OnInit {
       this.movieService.getRatingWithId(this.movieId).subscribe((_ratingInfo : RatingInfo) => {
         console.log(_ratingInfo);
         if (_ratingInfo.userRating) {
-          this.alreadyrated = true;
+          this.alreadyRated = true;
           this.userMovierating = _ratingInfo.userRating;
         }
       });
@@ -74,10 +76,15 @@ export class MovieCardComponent  implements OnInit {
       this.movieService.getRatingWithId(this.movieId).subscribe((_ratingInfo : RatingInfo) => {
         console.log(_ratingInfo);
         if (_ratingInfo.userRating) {
-          this.alreadyrated = true;
+          this.alreadyRated = true;
           this.userMovierating = _ratingInfo.userRating;
         }
       });
     });
+  }
+
+  navigateToRecommed(movieName: string) {
+    console.log("Clicked on ",movieName);
+    this.router.navigate([`/movies/${movieName}`]);
   }
 }

@@ -4,7 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'filter-movies',
   template: `
-    <input class="movieSearch" name="search" type="text" placeholder="movie name" [(ngModel)]="filter">
+    <input class="movieSearch" name="search" type="text" placeholder="movie name" [(ngModel)]="filter" autocomplete="off">
   `,
   styles: [`
   .movieSearch {
@@ -17,7 +17,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
     border: 1px solid #dfe1e5;
     box-shadow: none;
     width: 690px;
-    border-radius: 24px;
+    border-radius: 6px;
     z-index: 3;
     height: 44px;
     margin: 0 auto;

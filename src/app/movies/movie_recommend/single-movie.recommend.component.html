@@ -1,0 +1,5 @@
+<mat-spinner *ngIf="!loadingComplete" class="loading"></mat-spinner>
+
+<div class="container" *ngIf="authenticated && movieRecommendList">
+  <movie-card *ngFor="let movie of movieRecommendList" [movieId]="movie.movieId" disabled></movie-card>
+</div>

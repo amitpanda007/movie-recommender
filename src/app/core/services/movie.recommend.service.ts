@@ -17,8 +17,13 @@ export class MovieRecommendService{
   }
 
   getMovieRecommend() {
-    const DEFAULT_RECOMMEND_URL = environment.apiUrl + 'recommend/movies';
-    return this.http.get(DEFAULT_RECOMMEND_URL, this.auth.tokenHeader);
+    const MOVIE_RECOMMEND_URL = environment.apiUrl + 'recommend/movies';
+    return this.http.get(MOVIE_RECOMMEND_URL, this.auth.tokenHeader);
+  }
+
+  getSvdRecommend(data: object) {
+    const SVD_RECOMMEND_URL = environment.apiUrl + 'recommend/movies/svd';
+    return this.http.post(SVD_RECOMMEND_URL, data, this.auth.tokenHeader)
   }
 
 }

@@ -11,7 +11,7 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 const BASE_URL = environment.apiUrl;
-const REGISTER_API = BASE_URL + 'auth/info';
+const REGISTER_API = BASE_URL + 'auth/register';
 const LOGIN_API    = BASE_URL + 'auth/login';
 const LOGOUT_API   = BASE_URL + 'auth/logout';
 const REFRESH_API  = BASE_URL + 'auth/refresh';
@@ -97,7 +97,7 @@ export class AuthService{
         duration: 2000
       });
     }, (err:any) => {
-      if (err.status == 401)
+      if (err.status == 401 || err.status == 403)
         this._snackBar.open(err.error.message, "Close", {duration: 2000});
       else
         this._snackBar.openFromComponent(ErrorSnackbar, {

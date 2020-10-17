@@ -12,9 +12,55 @@
 <div class="genreContainer" *ngIf="hideRecommendGenres">
   <genre-card *ngFor="let genre of recommendGenres" [genre]="genre" (genreSelected)="userSelectedGenre($event)"></genre-card>
 </div>
-<div class="container" *ngIf="recommendList">
+
+<div class="container" *ngIf="!authenticated && recommendList">
   <movie-card *ngFor="let movie of recommendList" [movieId]="movie.movieId" disabled></movie-card>
 </div>
+
+<div class="container" *ngIf="authenticated">
+  <mat-tab-group mat-align-tabs="center" (selectedTabChange)="gerRecommendation($event)">
+    <mat-tab label="Rating Based">
+      <div class="container rating-rec" *ngIf="ratingRecommendList">
+        <div *ngFor="let movieList of ratingRecommendList">
+          <div class="center">
+            <p class="rec-title">{{movieList.rated_movie}}</p>
+          </div>
+          <div class="container">
+            <movie-card *ngFor="let movie of movieList.recMovies" [movieId]="movie.movieId" disabled></movie-card>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Genre Based">
+      <div class="container genre-rec" *ngIf="genreRecommendList">
+        <div *ngFor="let genreList of genreRecommendList">
+          <div class="center">
+            <p class="rec-title">{{genreList.genre}}</p>
+          </div>
+          <div class="container">
+            <movie-card *ngFor="let movie of genreList.recMovies" [movieId]="movie.movieId" disabled></movie-card>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Movie Based">
+      <div class="center">
+        <filter-movies (changed)="searchData($event)" (keydown.enter)="searchMovieRecommend($event)"></filter-movies>
+        <div class="search-rec" *ngIf="movieSearchResult">
+          <ul>
+            <li *ngFor="let result of movieSearchResult">
+             {{result}} 
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="container movie-rec" *ngIf="movieRecommendList">
+        <movie-card *ngFor="let movie of movieRecommendList" [movieId]="movie.movieId" disabled></movie-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
 <button *ngIf="genresSelected.length > 0 && !initialSetupReady" mat-flat-button color="primary" [disabled]="genresSelected.length < 5"
   matBadge="{{genresSelected.length}}" matBadgePosition="after" matBadgeColor="accent" class="counter-btn" (click)="sendGenreSelection()">
   Continue

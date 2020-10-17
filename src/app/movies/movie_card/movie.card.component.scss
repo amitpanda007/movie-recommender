@@ -10,6 +10,7 @@
 .mat-card-actions {
   margin: 5px 5px;
   min-height: 32px;
+  padding: 6px 0 0 0;
 }
 
 .mat-card>.mat-card-actions:last-child {
@@ -44,6 +45,10 @@
 
 .card-action {
   display: flex;
+}
+
+.card-action-icon {
+  margin-bottom: 3px;
 }
 
 .movie-rating {
@@ -98,4 +103,15 @@ mat-card-subtitle > span {
   padding-left: 5px;
   color: black;
   font-weight: 400;
+}
+
+.rec-icon {
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  margin-bottom: 4px;
+}
+
+a {
+  cursor: pointer;
 }

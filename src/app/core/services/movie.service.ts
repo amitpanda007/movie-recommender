@@ -55,6 +55,11 @@ export class MovieService{
     return response;
   }
 
+  getMovieNameFromSearchTerm(searchTerm: string) {
+    const MOVIES_SEARCH_URL = environment.apiUrl + `movies/search/${searchTerm}`;
+    return this.http.get(MOVIES_SEARCH_URL);
+  }
+
   getAllGenres() {
     const MOVIE_GENRE_URL = environment.apiUrl + 'movies/genres';
     return this.http.get(MOVIE_GENRE_URL);

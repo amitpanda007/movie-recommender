@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { MovieRecommendService } from 'src/app/core/services/movie.recommend.service';
 import { ErrorSnackbar, SuccessSnackbar } from 'src/app/common/snackbar.component';
@@ -13,9 +13,15 @@ import { Router } from '@angular/router';
   templateUrl: './movies.recommend.component.html',
   styleUrls: ['./movies.recommend.component.scss']
 })
-export class MoviesRecommendComponent implements OnInit{
+export class MoviesRecommendComponent implements OnInit, AfterViewInit {
   authenticated: boolean;
   private recommendList: any;
+  private movieRecommendList: any;
+  private genreRecommendList: any;
+  private ratingRecommendList: any;
+  private movieSearchResult: any;
+
+  private userSearchterm: string;
   private loadingComplete: boolean = false;
   private userRecommendationReady: boolean = false;
   private initialSetupReady: boolean = false;
@@ -23,8 +29,13 @@ export class MoviesRecommendComponent implements OnInit{
   private recommendGenres: any;
   private genresSelected: Array<string> = [];
 
-  constructor(private _snackBar: MatSnackBar, private movieRecommendService : MovieRecommendService, private movieService: MovieService,
-              private auth: AuthService, private userService: UserService, private dislog: MatDialog, private router: Router) {}
+  constructor(private elementRef: ElementRef, private _snackBar: MatSnackBar, private movieRecommendService : MovieRecommendService, 
+              private movieService: MovieService, private auth: AuthService, private userService: UserService, private dislog: MatDialog, private router: Router) {}
+
+
+  ngAfterViewInit(): void {
+    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F3E5F5';
+  }
 
   ngOnInit(): void {
     this.auth.subscribe(
@@ -65,29 +76,7 @@ export class MoviesRecommendComponent implements OnInit{
           });
         }else {
           console.log("Retriving Recommendation for Registered User.");
-          //TODO: Get Recommendation for Logged in user who has done initial genre selection
-          this.movieRecommendService.getMovieRecommend().subscribe((_response : any) => {
-            this.loadingComplete = true;
-            if(_response.message) {
-              this._snackBar.openFromComponent(SuccessSnackbar, {
-                data: _response.message,
-                duration: 2000
-              });
-            }
-            if(_response.recommend) {
-              this.userRecommendationReady = true;
-              this.recommendList = _response.recommend;
-            }
-          },error => {
-            console.log(error);
-            console.log("Some Error Happened");
-            this.loadingComplete = true;
-            this._snackBar.openFromComponent(ErrorSnackbar, {
-              data: error.message,
-              duration: 2000
-            });
-          });
-          // this.userRecommendationReady = true;
+          this.recommendBasedOnRating();
         }
       },error => {
         console.log("Some Error Happened");
@@ -126,6 +115,145 @@ export class MoviesRecommendComponent implements OnInit{
         duration: 2000
       });
     });
+  }
+
+  searchData(searchTerm: string) {
+    if(searchTerm) {
+      this.userSearchterm = searchTerm;
+      this.movieService.getMovieNameFromSearchTerm(this.userSearchterm).subscribe((_response: any) => {
+        console.log(_response);
+        if(_response.length == 0) {
+          this.movieSearchResult = "";
+        }else {
+          this.movieSearchResult = _response;
+        }
+      });
+    }else {
+      console.log("invalid search");
+      this.movieSearchResult = "";
+    }
+  }
+
+  searchMovieRecommend(event: any) {
+    // console.log(event);
+    this.recommendBasedOnMovie(this.userSearchterm);
+  }
+
+  recommendBasedOnMovie(movieName: string) {
+    this.loadingComplete = false;
+    const postdata = {
+      "type": "movie",
+      "movie": `${movieName}`
+    };
+    this.movieRecommendService.getSvdRecommend(postdata).subscribe((_response: any) => {
+      this.loadingComplete = true;
+      console.log(_response);
+      if(_response.message) {
+        this._snackBar.openFromComponent(SuccessSnackbar, {
+          data: _response.message,
+          duration: 2000
+        });
+      }
+      if(_response.recommend) {
+        this.userRecommendationReady = true;
+        this.movieRecommendList = _response.recommend;
+      }
+    },error => {
+      console.log(error);
+      console.log("Some Error Happened");
+      this.loadingComplete = true;
+      this._snackBar.openFromComponent(ErrorSnackbar, {
+        data: error.message,
+        duration: 2000
+      });
+    });
+  }
+
+  recommendBasedOnGenre() {
+    this.loadingComplete = false;
+    const postdata = {
+      "type": "genre"
+    };
+    this.movieRecommendService.getSvdRecommend(postdata).subscribe((_response : any) => {
+      this.loadingComplete = true;
+      console.log(_response);
+      if(_response.message) {
+        this._snackBar.openFromComponent(SuccessSnackbar, {
+          data: _response.message,
+          duration: 2000
+        });
+      }
+      if(_response.recommend) {
+        this.userRecommendationReady = true;
+        this.genreRecommendList = _response.recommend;
+      }
+    },error => {
+      console.log(error);
+      console.log("Some Error Happened");
+      this.loadingComplete = true;
+      this._snackBar.openFromComponent(ErrorSnackbar, {
+        data: error.message,
+        duration: 2000
+      });
+    });
+  }
+
+  recommendBasedOnRating() {
+    this.loadingComplete = false;
+    const postdata = {
+      "type": "rated"
+    };
+    this.movieRecommendService.getSvdRecommend(postdata).subscribe((_response : any) => {
+      this.loadingComplete = true;
+      console.log(_response);
+      if(_response.message) {
+        this._snackBar.openFromComponent(SuccessSnackbar, {
+          data: _response.message,
+          duration: 2000
+        });
+      }
+      if(_response.recommend) {
+        this.userRecommendationReady = true;
+        this.ratingRecommendList = _response.recommend;
+      }
+    },error => {
+      console.log(error);
+      console.log("Some Error Happened");
+      this.loadingComplete = true;
+      this._snackBar.openFromComponent(ErrorSnackbar, {
+        data: error.message,
+        duration: 2000
+      });
+    });
+  }
+
+  gerRecommendation(event) {
+    const tabInfo = event.tab;
+    switch (event.index) {  
+      case 0:
+        this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F3E5F5';
+        if(tabInfo.isActive && this.ratingRecommendList == undefined) {
+          this.recommendBasedOnRating();
+        }
+        break;
+      case 1:
+        this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F9FBE7';
+        console.log(this.genreRecommendList);
+        if(tabInfo.isActive && this.genreRecommendList == undefined) {
+          this.recommendBasedOnGenre();
+        }
+        break;
+      case 2:
+        this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#E8F5E9';
+        if(tabInfo.isActive && this.movieRecommendList == undefined) {
+          this.recommendBasedOnMovie("");
+        }
+        break;
+          
+      default:
+        break;
+    }
+
   }
 
 }
