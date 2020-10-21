@@ -12,6 +12,7 @@ import { MovieRecommendService } from 'src/app/core/services/movie.recommend.ser
 })
 export class SingleMovieRecommendComponent implements OnInit, AfterViewInit {
   authenticated: boolean;
+  private currentMovie: string;
   private movieRecommendList: any;
   private loadingComplete: boolean = false;
   private userRecommendationReady: boolean = false;
@@ -26,7 +27,9 @@ export class SingleMovieRecommendComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.route.params.subscribe(params => {
-      const movieName = params['movieName'];
+      this.loadingComplete = false;
+      this.movieRecommendList = undefined;
+      this.currentMovie = params['movieName'];
 
       this.auth.subscribe(
         (authenticated) => {
@@ -37,7 +40,7 @@ export class SingleMovieRecommendComponent implements OnInit, AfterViewInit {
 
         const postdata = {
           "type": "movie",
-          "movie": `${movieName}`
+          "movie": `${this.currentMovie}`
         };
         this.movieRecommendService.getSvdRecommend(postdata).subscribe((_response: any) => {
           this.loadingComplete = true;

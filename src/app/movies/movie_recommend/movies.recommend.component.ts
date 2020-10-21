@@ -7,6 +7,8 @@ import { InitialGenreSelectionDialogComponent } from './initial.genre.selection.
 import { MovieService } from 'src/app/core/services/movie.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { Router } from '@angular/router';
+import { NavComponent } from 'src/app/core/nav/nav.component';
+import { NavService } from 'src/app/core/services/nav.service';
 
 @Component({
   selector: 'movie-recommend',
@@ -30,7 +32,8 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
   private genresSelected: Array<string> = [];
 
   constructor(private elementRef: ElementRef, private _snackBar: MatSnackBar, private movieRecommendService : MovieRecommendService, 
-              private movieService: MovieService, private auth: AuthService, private userService: UserService, private dislog: MatDialog, private router: Router) {}
+              private movieService: MovieService, private auth: AuthService, private userService: UserService, private dislog: MatDialog, 
+              private router: Router, private navService: NavService) {}
 
 
   ngAfterViewInit(): void {
@@ -137,9 +140,12 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
   searchMovieRecommend(event: any) {
     // console.log(event);
     this.recommendBasedOnMovie(this.userSearchterm);
+    this.userSearchterm = "";
   }
 
   recommendBasedOnMovie(movieName: string) {
+    // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#E8F5E9';
+    this.navService.changeClass("toolbar-green");
     this.loadingComplete = false;
     const postdata = {
       "type": "movie",
@@ -170,6 +176,8 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
   }
 
   recommendBasedOnGenre() {
+    // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F9FBE7';
+    this.navService.changeClass("toolbar-yellow");
     this.loadingComplete = false;
     const postdata = {
       "type": "genre"
@@ -199,13 +207,14 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
   }
 
   recommendBasedOnRating() {
+    // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F3E5F5';
+    this.navService.changeClass("toolbar-purple");
     this.loadingComplete = false;
     const postdata = {
       "type": "rated"
     };
     this.movieRecommendService.getSvdRecommend(postdata).subscribe((_response : any) => {
       this.loadingComplete = true;
-      console.log(_response);
       if(_response.message) {
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: _response.message,
@@ -215,6 +224,13 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       if(_response.recommend) {
         this.userRecommendationReady = true;
         this.ratingRecommendList = _response.recommend;
+        for (let [index, ratedMovie] of this.ratingRecommendList.entries()) {
+          let curMovie = ratedMovie['rated_movie'];
+          this.movieService.getRatingWithId(curMovie[1]).subscribe((_response: any) => {
+            const userRating = _response.userRating;
+            this.ratingRecommendList[index].rated_movie.push({"userRating":userRating});
+          });
+        }
       }
     },error => {
       console.log(error);
@@ -232,19 +248,21 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
     switch (event.index) {  
       case 0:
         this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F3E5F5';
+        this.navService.changeClass("toolbar-purple");
         if(tabInfo.isActive && this.ratingRecommendList == undefined) {
           this.recommendBasedOnRating();
         }
         break;
       case 1:
         this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#F9FBE7';
-        console.log(this.genreRecommendList);
+        this.navService.changeClass("toolbar-yellow");
         if(tabInfo.isActive && this.genreRecommendList == undefined) {
           this.recommendBasedOnGenre();
         }
         break;
       case 2:
         this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#E8F5E9';
+        this.navService.changeClass("toolbar-green");
         if(tabInfo.isActive && this.movieRecommendList == undefined) {
           this.recommendBasedOnMovie("");
         }

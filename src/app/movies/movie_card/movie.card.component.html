@@ -51,9 +51,9 @@
     </span>
   </mat-card-actions>
 
-  <mat-card-actions class="card-action card-action-icon">
+  <mat-card-actions *ngIf="authenticated" class="card-action card-action-icon">
     <a (click)="navigateToRecommed(movieInfo?.movieName)">
-      <img class="rec-icon" src="{{recommendImage}}" alt="">
+      <img class="rec-icon" src="{{recommendImage}}" alt="Recommend movie for this movie">
     </a>
   </mat-card-actions>
 

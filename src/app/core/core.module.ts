@@ -14,13 +14,14 @@ import { NavComponent } from './nav/nav.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MatSnackBarModule } from '@angular/material';
+import { NavService } from './services/nav.service';
 
 
 @NgModule({
   imports: [CommonModule, SharedModule],
   exports: [NavComponent],
   declarations: [NavComponent],
-  providers: [AuthService, CacheService, LocalStorageService, MovieService, MovieRecommendService, UserService,
+  providers: [AuthService, CacheService, LocalStorageService, MovieService, MovieRecommendService, UserService, NavService, 
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true,}]
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard{
