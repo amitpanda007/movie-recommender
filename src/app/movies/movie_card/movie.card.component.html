@@ -1,60 +1,125 @@
 <mat-card class="example-card">
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 
-  <mat-card-header class="card-header">
-    <!-- <div mat-card-avatar class="example-header-image"></div> -->
-    <mat-card-title class="card-title" *ngIf="movieInfo"><a href="{{movieInfo?.imdbUrl}}" target="_blank">{{movieInfo?.movieName | default:'Movie Name'}}</a>
-      <span class="rating-star">
-        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="currentColor" role="presentation">
-          <path
-            d="M12 20.1l5.82 3.682c1.066.675 2.37-.322 2.09-1.584l-1.543-6.926 5.146-4.667c.94-.85.435-2.465-.799-2.567l-6.773-.602L13.29.89a1.38 1.38 0 0 0-2.581 0l-2.65 6.53-6.774.602C.052 8.126-.453 9.74.486 10.59l5.147 4.666-1.542 6.926c-.28 1.262 1.023 2.26 2.09 1.585L12 20.099z">
-          </path>
-        </svg>
-        <span class="overall-rating-value">{{movieInfo?.rating}}/5</span>
-      </span>
-    </mat-card-title>
-    <mat-card-subtitle><span>Genre</span>: {{movieInfo?.genre | default:'Genre'}}</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image class="card-image" src="{{movieInfo?.coverImage | default: defaultImage}}" alt="">
+  <div>
+    <mat-card-header class="card-header">
+      <!-- <div mat-card-avatar class="example-header-image"></div> -->
+      <mat-card-title class="card-title" *ngIf="movieInfo"
+        ><a href="{{ movieInfo?.imdbUrl }}" target="_blank">{{
+          movieInfo?.movieName | default: "Movie Name"
+        }}</a
+        ><span> ({{ movieInfo.releaseYear }})</span>
+        <span class="rating-star">
+          <svg
+            width="24"
+            height="24"
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            role="presentation"
+          >
+            <path
+              d="M12 20.1l5.82 3.682c1.066.675 2.37-.322 2.09-1.584l-1.543-6.926 5.146-4.667c.94-.85.435-2.465-.799-2.567l-6.773-.602L13.29.89a1.38 1.38 0 0 0-2.581 0l-2.65 6.53-6.774.602C.052 8.126-.453 9.74.486 10.59l5.147 4.666-1.542 6.926c-.28 1.262 1.023 2.26 2.09 1.585L12 20.099z"
+            ></path>
+          </svg>
+          <span class="overall-rating-value">{{ movieRating }}</span>
+        </span>
+      </mat-card-title>
+      <mat-card-subtitle
+        ><span>Genre</span>:
+        {{ movieInfo?.genre | default: "Genre" }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <img
+      mat-card-image
+      class="card-image"
+      src="{{ movieInfo?.coverImage | default: defaultImage }}"
+      alt=""
+    />
 
-  <mat-accordion>
-    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-      <mat-expansion-panel-header (click)="showStory()">
-        <mat-panel-title>
-          {{showStoryLine ? 'hide' : 'show'}} story line
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>{{movieInfo?.storyLine == "" ? "No story line found for this movie." : movieInfo?.storyLine}}</p>
-    </mat-expansion-panel>
-  </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+      >
+        <mat-expansion-panel-header (click)="showStory()">
+          <mat-panel-title>
+            {{ showStoryLine ? "hide" : "show" }} story line
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p>
+          {{
+            movieInfo?.storyLine == ""
+              ? "No story line found for this movie."
+              : movieInfo?.storyLine
+          }}
+        </p>
+      </mat-expansion-panel>
+    </mat-accordion>
 
-  <mat-card-actions *ngIf="authenticated && !alreadyRated" class="card-action">
-    <!-- <button mat-button (click)="rateMovie()">RATE</button> -->
-    <mat-slide-toggle (click)="rateMovie()"
-          class="toggle-rating"
-          [color]="color"
-          [checked]="checked"
-          [disabled]="disabled">
-          {{!showStartsToRate ? 'Rate this movie' : ''}}
+    <div
+      *ngIf="authenticated && isRatingLoading"
+      class="card-action buffer-loading"
+    >
+      <mat-progress-bar mode="buffer"></mat-progress-bar>
+    </div>
+
+    <mat-card-actions
+      *ngIf="authenticated && !alreadyRated && !isRatingLoading"
+      class="card-action"
+    >
+      <!-- <button mat-button (click)="rateMovie()">RATE</button> -->
+      <mat-slide-toggle
+        (click)="rateMovie()"
+        class="toggle-rating"
+        [color]="color"
+        [checked]="checked"
+        [disabled]="disabled"
+      >
+        {{ !showStartsToRate ? "Rate this movie" : "" }}
       </mat-slide-toggle>
-    <rating *ngIf="showStartsToRate" (userRating)="updateMovieRating($event)" class="movie-rating"></rating>
-  </mat-card-actions>
+      <rating
+        *ngIf="showStartsToRate"
+        (userRating)="updateMovieRating($event)"
+        class="movie-rating"
+      ></rating>
+    </mat-card-actions>
 
-  <mat-card-actions *ngIf="alreadyRated" class="card-action">
-    <span>You Rated :&nbsp;</span>
-    <span class="rating-star">
-      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="currentColor" role="presentation">
-        <path
-          d="M12 20.1l5.82 3.682c1.066.675 2.37-.322 2.09-1.584l-1.543-6.926 5.146-4.667c.94-.85.435-2.465-.799-2.567l-6.773-.602L13.29.89a1.38 1.38 0 0 0-2.581 0l-2.65 6.53-6.774.602C.052 8.126-.453 9.74.486 10.59l5.147 4.666-1.542 6.926c-.28 1.262 1.023 2.26 2.09 1.585L12 20.099z">
-        </path>
-      </svg>
-      <span class="rating-value">{{userMovierating}}</span>
-    </span>
-  </mat-card-actions>
+    <mat-card-actions
+      *ngIf="alreadyRated && !isRatingLoading"
+      class="card-action"
+    >
+      <span>You Rated :&nbsp;</span>
+      <span class="rating-star">
+        <svg
+          width="24"
+          height="24"
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          role="presentation"
+        >
+          <path
+            d="M12 20.1l5.82 3.682c1.066.675 2.37-.322 2.09-1.584l-1.543-6.926 5.146-4.667c.94-.85.435-2.465-.799-2.567l-6.773-.602L13.29.89a1.38 1.38 0 0 0-2.581 0l-2.65 6.53-6.774.602C.052 8.126-.453 9.74.486 10.59l5.147 4.666-1.542 6.926c-.28 1.262 1.023 2.26 2.09 1.585L12 20.099z"
+          ></path>
+        </svg>
+        <span class="rating-value">{{ userMovierating }}</span>
+      </span>
+    </mat-card-actions>
 
-  <mat-card-actions *ngIf="authenticated" class="card-action card-action-icon">
-    <a (click)="navigateToRecommed(movieInfo?.movieName)">
-      <img class="rec-icon" src="{{recommendImage}}" alt="Recommend movie for this movie">
-    </a>
-  </mat-card-actions>
-
+    <mat-card-actions
+      *ngIf="authenticated"
+      class="card-action card-action-icon"
+    >
+      <a (click)="navigateToRecommed(movieInfo?.movieName)">
+        <img
+          class="rec-icon"
+          src="{{ recommendImage }}"
+          alt="Recommend movie for this movie"
+        />
+      </a>
+    </mat-card-actions>
+  </div>
 </mat-card>

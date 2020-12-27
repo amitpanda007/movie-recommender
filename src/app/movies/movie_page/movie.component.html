@@ -1,0 +1,9 @@
+<div class="hero-image-container">
+    <div class="hero-image hero-image-desktop" 
+    [ngStyle]="{'background': 'url(' + backgroundUrl + ') no-repeat 0 0 / cover'}"></div>
+</div>
+<img src="{{backgroundUrl}}">
+<h1>{{movie?.movieName}}</h1>
+<h2>{{movie?.genre}}</h2>
+<h3>{{movie?.releaseYear}}</h3>
+<p>{{movie?.storyLine}}</p>

@@ -7,12 +7,14 @@ import { MoviesListComponent } from './movies_list/movies.list.component';
 import { FilterMoviesComponent } from './movies_list/movies.filter.component';
 import { InitialGenreSelectionDialogComponent } from './movie_recommend/initial.genre.selection.dialog.component';
 import { SingleMovieRecommendComponent } from './movie_recommend/single-movie.recommend.component';
+import { MovieComponent } from './movie_page/movie.component';
 
 
 const routes: Routes = [
   { path: '', component: MoviesRecommendComponent},
   { path: 'movies', component: MoviesListComponent},
-  { path: 'movies/:movieName', component: SingleMovieRecommendComponent}
+  { path: 'movies/:movieName', component: SingleMovieRecommendComponent},
+  { path: 'movie/:movieId', component: MovieComponent}
 ]
 
 @NgModule({
@@ -21,5 +23,6 @@ const routes: Routes = [
 })
 export class MoviesRoutingModule{
   static components = [MoviesRecommendComponent, MovieCardComponent, GenreCardComponent, MoviesListComponent,
-                        FilterMoviesComponent, InitialGenreSelectionDialogComponent, SingleMovieRecommendComponent];
+                      FilterMoviesComponent, InitialGenreSelectionDialogComponent, SingleMovieRecommendComponent, 
+                      MovieComponent];
 }

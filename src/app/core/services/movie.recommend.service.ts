@@ -11,7 +11,7 @@ export class MovieRecommendService{
 
   constructor(private http: HttpClient, private cacheService: CacheService, private auth: AuthService) {}
 
-  getDefaultRecommend() {
+  getAnonymousRecommend() {
     const DEFAULT_RECOMMEND_URL = environment.apiUrl + 'recommend/anonymous';
     return this.http.get(DEFAULT_RECOMMEND_URL);
   }

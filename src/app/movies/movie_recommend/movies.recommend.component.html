@@ -19,8 +19,11 @@
 </div>
 
 <div class="container" *ngIf="authenticated">
-  <mat-tab-group mat-align-tabs="center" (selectedTabChange)="gerRecommendation($event)">
+  <mat-tab-group mat-align-tabs="center" (selectedTabChange)="getRecommendation($event)">
     <mat-tab label="Rating Based">
+      <div *ngIf="ratingRecommendList?.length == 0" class="container big-message">
+        Start rating movies to see rating based Recommendation
+      </div>
       <div class="container rating-rec" *ngIf="ratingRecommendList">
         <div *ngFor="let movieList of ratingRecommendList">
           <div class="center">

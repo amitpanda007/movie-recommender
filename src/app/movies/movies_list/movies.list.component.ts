@@ -21,10 +21,6 @@ export class MoviesListComponent  implements OnInit {
 
   ngOnInit(): void {
     this.showPerPage = ITEMS_PER_PAGE;
-    // this.movieService.getMovies(0, this.showPerPage).subscribe((data: any) => {
-    //   console.log(data);
-    //   this.moviesList =  this.filteredMoviesList = data;
-    // });
 
     this.movieService.getMoviesWithCache(INITIAL_MOVIE_ID, this.showPerPage).subscribe((data: any) => {
       this.moviesList =  this.filteredMoviesList = data;

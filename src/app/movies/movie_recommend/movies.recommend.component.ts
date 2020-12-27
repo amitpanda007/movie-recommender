@@ -48,14 +48,17 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
 
     console.log(this.authenticated);
     if (!this.authenticated) {
-      this.movieRecommendService.getDefaultRecommend().subscribe((_response : any) => {
+      this.movieRecommendService.getAnonymousRecommend().subscribe((_response : any) => {
         this.loadingComplete = true;
         this.recommendList = _response.recommend;
       },error => {
         this.loadingComplete = true;
+        if (error.name == "HttpErrorResponse") {
+          error.message = "Unable to reach API server. please try after a while."
+        }
         this._snackBar.openFromComponent(ErrorSnackbar, {
           data: error.message,
-          duration: 2000
+          duration: 3000
         });
       });
     }
@@ -86,7 +89,7 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
         this.loadingComplete = true;
         this._snackBar.openFromComponent(ErrorSnackbar, {
           data: error,
-          duration: 2000
+          duration: 3000
         });
       });
     }
@@ -102,12 +105,12 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
     this.userService.updateUserGenre({"data": this.genresSelected.join()}).subscribe((_resp: any) => {
       this._snackBar.openFromComponent(SuccessSnackbar, {
         data: _resp.message,
-        duration: 2000
+        duration: 3000
       });
       this.userService.updateUserPreference().subscribe((_resp: any) => {
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: _resp.message,
-          duration: 2000
+          duration: 3000
         });
 
         location.reload();
@@ -115,7 +118,7 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
     },error => {
       this._snackBar.openFromComponent(ErrorSnackbar, {
         data: error.message,
-        duration: 2000
+        duration: 3000
       });
     });
   }
@@ -157,7 +160,7 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       if(_response.message) {
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: _response.message,
-          duration: 2000
+          duration: 3000
         });
       }
       if(_response.recommend) {
@@ -168,9 +171,12 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       console.log(error);
       console.log("Some Error Happened");
       this.loadingComplete = true;
+      if (error.name == "HttpErrorResponse") {
+        error.message = "Error retriving recommendation from API server. please try after a while."
+      }
       this._snackBar.openFromComponent(ErrorSnackbar, {
         data: error.message,
-        duration: 2000
+        duration: 3000
       });
     });
   }
@@ -188,7 +194,7 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       if(_response.message) {
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: _response.message,
-          duration: 2000
+          duration: 3000
         });
       }
       if(_response.recommend) {
@@ -199,9 +205,12 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       console.log(error);
       console.log("Some Error Happened");
       this.loadingComplete = true;
+      if (error.name == "HttpErrorResponse") {
+        error.message = "Error retriving recommendation from API server. please try after a while."
+      }
       this._snackBar.openFromComponent(ErrorSnackbar, {
         data: error.message,
-        duration: 2000
+        duration: 3000
       });
     });
   }
@@ -218,7 +227,7 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       if(_response.message) {
         this._snackBar.openFromComponent(SuccessSnackbar, {
           data: _response.message,
-          duration: 2000
+          duration: 3000
         });
       }
       if(_response.recommend) {
@@ -236,14 +245,17 @@ export class MoviesRecommendComponent implements OnInit, AfterViewInit {
       console.log(error);
       console.log("Some Error Happened");
       this.loadingComplete = true;
+      if (error.name == "HttpErrorResponse") {
+        error.message = "Error retriving recommendation from API server. please try after a while."
+      }
       this._snackBar.openFromComponent(ErrorSnackbar, {
         data: error.message,
-        duration: 2000
+        duration: 3000
       });
     });
   }
 
-  gerRecommendation(event) {
+  getRecommendation(event) {
     const tabInfo = event.tab;
     switch (event.index) {  
       case 0:

@@ -10,7 +10,7 @@
 .mat-card-actions {
   margin: 5px 5px;
   min-height: 32px;
-  padding: 6px 0 0 0;
+  padding: 0;
 }
 
 .mat-card>.mat-card-actions:last-child {
@@ -18,7 +18,7 @@
 }
 
 .example-card {
-  width: 210px;
+  width: 180px;
   margin: 10px;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .card-title {
-  font-size: medium;
+  font-size: small;
 }
 
 .card-title>a {
@@ -35,7 +35,7 @@
 }
 
 .card-image {
-  height: 280px;
+  height: 220px;
 }
 
 .example-header-image {
@@ -45,6 +45,7 @@
 
 .card-action {
   display: flex;
+  align-items: center;
 }
 
 .card-action-icon {
@@ -65,8 +66,8 @@ mat-card-subtitle {
 }
 
 mat-card-subtitle > span {
-  color: pink;
-  font-size: medium;
+  color: deeppink;
+  font-size: small;
   font-weight: 400;
 }
 
@@ -114,4 +115,8 @@ mat-card-subtitle > span {
 
 a {
   cursor: pointer;
+}
+
+.buffer-loading {
+  margin-top: 20px;
 }
